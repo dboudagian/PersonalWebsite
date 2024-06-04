@@ -153,9 +153,10 @@
         </section>
         <!-- Contact Section-->
         <!-- Contact Section Form-->
+<!-- Contact Section Form-->
 <div class="row justify-content-center">
     <div class="col-lg-8 col-xl-7">
-        <form id="contactForm" action="send_email.php" method="POST">
+        <form id="contactForm" method="POST">
             <!-- Name input-->
             <div class="form-floating mb-3">
                 <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required />
@@ -184,8 +185,33 @@
             <!-- Submit Button-->
             <button class="btn btn-primary btn-xl" id="submitButton" type="submit">Send</button>
         </form>
+        <!-- Success and Error Messages-->
+        <div id="formMessages" class="mt-3"></div>
     </div>
 </div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#contactForm').on('submit', function (e) {
+            e.preventDefault();
+            
+            $.ajax({
+                type: 'POST',
+                url: 'send_email.php',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    $('#formMessages').removeClass('text-danger').addClass('text-success').text(response.message);
+                },
+                error: function (response) {
+                    $('#formMessages').removeClass('text-success').addClass('text-danger').text(response.message);
+                }
+            });
+        });
+    });
+</script>
 
         <!-- Footer-->
         <footer class="footer text-center">

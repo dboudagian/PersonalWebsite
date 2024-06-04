@@ -7,8 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check that data was sent
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        echo "Please complete the form and try again.";
+        echo json_encode(["status" => "error", "message" => "Please complete the form and try again."]);
         exit;
     }
 
@@ -29,14 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Send the email
     if (mail($recipient, $subject, $email_content, $email_headers)) {
-        http_response_code(200);
-        echo "Thank you! Your message has been sent.";
+        echo json_encode(["status" => "success", "message" => "Thank you! Your message has been sent."]);
     } else {
-        http_response_code(500);
-        echo "Oops! Something went wrong, and we couldn't send your message.";
+        echo json_encode(["status" => "error", "message" => "Oops! Something went wrong, and we couldn't send your message."]);
     }
 } else {
-    http_response_code(403);
-    echo "There was a problem with your submission, please try again.";
+    echo json_encode(["status" => "error", "message" => "There was a problem with your submission, please try again."]);
 }
 ?>
+
